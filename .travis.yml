@@ -1,0 +1,19 @@
+arch: ppc64le
+
+services:
+  - docker
+
+cache:
+  directories:
+    - docker-cache
+
+before_script:
+  - |
+    filename=docker-cache/saved_images.tar
+    if [[ -f "$filename" ]]; then docker load < "$filename"; fi
+    mkdir -p docker-cache
+    docker pull ubuntu:18.04
+    docker save -o "$filename" ubuntu:18.04
+
+script:
+  - docker run ubuntu:18.04
